@@ -1,19 +1,18 @@
-/***************************************************************************
-  This is a library for the BMP280 humidity, temperature & pressure sensor
-
-  Designed specifically to work with the Adafruit BMEP280 Breakout 
-  ----> http://www.adafruit.com/products/2651
-
-  These sensors use I2C or SPI to communicate, 2 or 4 pins are required 
-  to interface.
-
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit andopen-source hardware by purchasing products
-  from Adafruit!
-
-  Written by Limor Fried & Kevin Townsend for Adafruit Industries.  
-  BSD license, all text above must be included in any redistribution
- ***************************************************************************/
+/***********************************************************************
+ * Altitude Tracker Designed for use with the following components:
+ * Arduino Nano - https://goo.gl/EB2WN2
+ * BMP280 Barameter - https://goo.gl/KBD7lA
+ * 0.91 Inch OLED Display 128x32 - https://goo.gl/dZC9nm
+ * 
+ * Code by David Payne - Qrome@yahoo.com
+ * 
+ * I2C pins are the Arduino Standard:
+ * SDA = A4
+ * SCL = A5
+ * 
+ * IMPORTANT:  Using the Adafruit_BMP280.h you must update the
+ * I2C address in the file to: #define BMP280_ADDRESS        (0x76)
+ */
 
 #include <Wire.h>
 #include <SPI.h>
@@ -22,8 +21,6 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BMP280.h>
 #include <math.h>
-
-
 
 Adafruit_BMP280 bme; // I2C
 
