@@ -62,13 +62,10 @@ void setup() {
     Serial.println("Could not find a valid BMP280 sensor, check wiring!");
     while (1);
   }
-  delay(3000);
-  
-  while (HomeAlt == 0.00) {
-    HomeAlt = getAltitudeSample();
-    delay(100);
-    Serial.print(".");
-  }
+  delay(1000);
+
+  // Calibrate and Initialize Home Altitude
+  calibrateHome();
   
   //lastAlt = HomeAlt;
   display.clearDisplay();
@@ -143,3 +140,21 @@ int getAltChange(float alt) {
 int getFfromC(float temp) {
   return round((temp * 1.8) + 32);
 }
+
+void calibrateHome() {
+  int width = 0;
+  int inx = 1;
+  while (HomeAlt == 0.00) {
+    // Build the first sample of readings for Calibration
+    HomeAlt = getAltitudeSample();
+    delay(200);
+    Serial.print(".");
+    width = (int)(((float)inx/(float)sampleMax) * 128);
+    for (int lines = 0; lines < 4; lines++) {
+      display.drawFastHLine(0, 28 + lines, width, WHITE);
+    }
+    display.display();
+    inx++;
+  }
+}
+
