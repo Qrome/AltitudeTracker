@@ -37,9 +37,12 @@ Adafruit_SSD1306 display(OLED_RESET);
 
 const int PREASURE = 1005;  // local air preasure
 float HomeAlt = 0.0;
+float lastAlt = 0.0;
 int MaxAlt = 0;
 float temp = 0.0;
-float alt = 0.0;
+const int sampleMax = 20;
+int sampleCount = 0;
+int samples[sampleMax];
   
 void setup() {
   Serial.begin(9600);
@@ -57,21 +60,26 @@ void setup() {
   display.println();
   display.println("    by David Payne");
   display.display();
-  
-  Serial.println(F("BMP280 test"));
-  
+    
   if (!bme.begin()) {  
     Serial.println("Could not find a valid BMP280 sensor, check wiring!");
     while (1);
   }
-  delay(2000);
-  HomeAlt = bme.readAltitude(PREASURE);
+  delay(3000);
+  
+  while (HomeAlt == 0.00) {
+    HomeAlt = getAltitudeSample();
+    delay(100);
+    Serial.print(".");
+  }
+  
+  //lastAlt = HomeAlt;
   display.clearDisplay();
 }
   
 void loop() {
     temp = bme.readTemperature();
-    alt = bme.readAltitude(PREASURE);
+    float alt = getAltitudeSample();
 
     if (getAltChange(alt) > MaxAlt) {
       MaxAlt = getAltChange(alt);
@@ -108,6 +116,23 @@ void displayAltitude(float alt, float temp) {
   }
   display.print(tmp);
   display.display();
+}
+
+float getAltitudeSample() {
+  samples[sampleCount++] = bme.readAltitude(PREASURE);
+  if (sampleCount == sampleMax) {
+    lastAlt = average(samples, sampleMax);
+    sampleCount = 0;
+  }
+  return lastAlt;
+}
+
+float average (int * array, int len)  // assuming array is int.
+{
+  long sum = 0L ;  // sum will be larger than an item, long for safety.
+  for (int i = 0 ; i < len ; i++)
+    sum += array [i] ;
+  return  ((float) sum) / len ;  // average will be fractional, so float may be appropriate.
 }
 
 float getFeet(float meters) {
