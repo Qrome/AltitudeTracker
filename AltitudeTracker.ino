@@ -57,14 +57,23 @@ void setup() {
   display.println();
   display.println("    by David Payne");
   display.display();
-    
+
+  delay(1000);
   if (!bme.begin()) {  
     Serial.println("Could not find a valid BMP280 sensor, check wiring!");
+    display.clearDisplay();
+    display.setTextSize(1);
+    display.setTextColor(WHITE);
+    display.setCursor(0,0);
+    display.println("   Could not find");
+    display.println();
+    display.println("valid BMP280 sensor");
+    display.display();
     while (1);
   }
-  delay(1000);
-
+    
   // Calibrate and Initialize Home Altitude
+  samples[0] = bme.readAltitude(PREASURE);
   calibrateHome();
   
   //lastAlt = HomeAlt;
@@ -113,19 +122,21 @@ void displayAltitude(float alt, float temp) {
 }
 
 float getAltitudeSample() {
+  
   samples[sampleCount++] = bme.readAltitude(PREASURE);
-  if (sampleCount == sampleMax) {
+  if (sampleCount > sampleMax) {
     lastAlt = average(samples, sampleMax);
     sampleCount = 0;
   }
   return lastAlt;
 }
 
-float average (int * array, int len)  // assuming array is int.
+float average (int * items, int len)  // assuming array is int.
 {
   long sum = 0L ;  // sum will be larger than an item, long for safety.
-  for (int i = 0 ; i < len ; i++)
-    sum += array [i] ;
+  for (int i = 0; i < len; i++) {
+    sum += items[i];
+  }
   return  ((float) sum) / len ;  // average will be fractional, so float may be appropriate.
 }
 
@@ -138,13 +149,20 @@ int getAltChange(float alt) {
 }
 
 int getFfromC(float temp) {
-  return round((temp * 1.8) + 32);
+  return round((temp * 1.45) + 32);
 }
 
 void calibrateHome() {
   int width = 0;
   int inx = 1;
-  while (HomeAlt == 0.00) {
+
+  for (int inx = 0; inx < (2 * sampleMax); inx++) {
+    getAltitudeSample();
+  }
+  lastAlt = 0.0;
+  HomeAlt = 0.0;
+  sampleCount = 0;
+  while (HomeAlt == 0.0) {
     // Build the first sample of readings for Calibration
     HomeAlt = getAltitudeSample();
     delay(200);
