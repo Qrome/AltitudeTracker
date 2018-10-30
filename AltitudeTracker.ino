@@ -37,13 +37,7 @@ SOFTWARE.
  * I2C address in the file to: #define BMP280_ADDRESS        (0x76)
  */
 
-#include <Wire.h>
-#include <SPI.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-#include <Adafruit_Sensor.h>
-#include <Adafruit_BMP280.h>
-#include <math.h>
+#include "settings.h"
 
 Adafruit_BMP280 bme; // I2C
 
@@ -54,15 +48,6 @@ Adafruit_SSD1306 display(OLED_RESET);
 #if (SSD1306_LCDHEIGHT != 32)
 #error("Height incorrect, please fix Adafruit_SSD1306.h!");
 #endif
-
-const int PREASURE = 1005;  // local air preasure
-float HomeAlt = 0.0;
-float lastAlt = 0.0;
-int MaxAlt = 0;
-float temp = 0.0;
-const int sampleMax = 20;
-int sampleCount = 0;
-int samples[sampleMax];
   
 void setup() {
   Serial.begin(9600);
