@@ -68,7 +68,7 @@ void setup() {
 
   delay(1000);
   if (!bme.begin()) {  
-    Serial.println("Could not find a valid BMP280 sensor, check wiring!");
+    Serial.println("Could not find a valid BMP280 sensor with address 0x3C, confirm wiring!");
     display.clearDisplay();
     display.setTextSize(1);
     display.setTextColor(WHITE);
