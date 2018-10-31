@@ -19,9 +19,9 @@ SOFTWARE.
 
 /***********************************************************************
  * Altitude Tracker Designed for use with the following components:
- * Arduino Nano - https://goo.gl/EB2WN2
- * BMP280 Barameter - https://goo.gl/KBD7lA
- * 0.91 Inch OLED Display 128x32 - https://goo.gl/dZC9nm
+ * Arduino Nano - https://amzn.to/2DdeWqt
+ * BMP280 Barameter - https://amzn.to/2yGTUN2
+ * 0.91 Inch OLED Display 128x32 - https://amzn.to/2SxxyWQ
  * 
  * Code by David Payne - Qrome@yahoo.com
  * 
